@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" 4-mru_cache.py """
+"""MRUCache module"""
 
 from collections import OrderedDict
 
@@ -7,14 +7,14 @@ BaseCaching = __import__('base_caching').BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """ MRUCache """
+    """MRUCache class"""
 
     def __init__(self):
         super().__init__()
         self.mru_order = OrderedDict()
 
     def put(self, key, item):
-        """ put function """
+        """Assign to the dictionary the item value for the key"""
         if not key or not item:
             return
         self.cache_data[key] = item
@@ -28,7 +28,7 @@ class MRUCache(BaseCaching):
         self.mru_order.move_to_end(key, False)
 
     def get(self, key):
-        """ get function """
+        """Return the value in self.cache_data linked to key"""
         if key in self.cache_data:
             self.mru_order.move_to_end(key, False)
             return self.cache_data[key]
