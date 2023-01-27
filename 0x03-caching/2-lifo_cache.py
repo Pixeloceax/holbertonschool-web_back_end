@@ -1,28 +1,27 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """LIFOCache module"""
-from base_caching import BaseCaching
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LIFOCache(BaseCaching):
-    """LIFOCache class"""
+    """ LIFOCache """
 
     def __init__(self):
-        """Constructor"""
         super().__init__()
 
     def put(self, key, item):
-        """Assign to the dictionary the item value for the key"""
-        if key in list(self.cache_data.keys()):
-            del self.cache_data[key]
-        if len(self.cache_data) == BaseCaching.MAX_ITEMS:
-            KeyToRemove = list(self.cache_data.keys()).pop()
-            del self.cache_data[KeyToRemove]
-            print("DISCARD: {}".format(KeyToRemove))
+        """Constructor"""
         if key and item:
+            if key in list(self.cache_data.keys()):
+                del self.cache_data[key]
+            if (len(self.cache_data.keys()) == self.MAX_ITEMS):
+                k = list(self.cache_data.keys()).pop()
+                del self.cache_data[k]
+                print("DISCARD: {}".format(k))
             self.cache_data[key] = item
 
     def get(self, key):
         """Return the value in self.cache_data linked to key"""
-        if key and key in self.cache_data:
+        if key in self.cache_data:
             return self.cache_data[key]
         return None
