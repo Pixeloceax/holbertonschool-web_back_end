@@ -30,7 +30,7 @@ class RedactingFormatter(logging.Formatter):
         """
         for field in self.fields:
             record.msg = re.sub(
-                f"{field}=+?;", f"{field}={self.REDACTION};", record.msg)
+                f"{field}=.+?;", f"{field}={self.REDACTION};", record.msg)
         return super().format(record)
 
 
