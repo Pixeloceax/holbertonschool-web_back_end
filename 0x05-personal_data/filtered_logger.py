@@ -30,7 +30,7 @@ class RedactingFormatter(logging.Formatter):
         """
         for field in self.fields:
             record.msg = re.sub(
-                f"{field}=\S+?;", f"{field}={self.REDACTION};", record.msg)
+                f"{field}=+?;", f"{field}={self.REDACTION};", record.msg)
         return super().format(record)
 
 
@@ -45,24 +45,3 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(stream_handler)
     return logging.Logger
-
-
-def get_db():
-    """
-    Connect to the database
-    """
-
-    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
-
-    if not db_name:
-        raise ValueError("PERSONAL_DATA_DB_NAME not set in environment")
-
-    return mysql.connector.connect(
-        host=host,
-        user=username,
-        password=password,
-        database=db_name
-    )
