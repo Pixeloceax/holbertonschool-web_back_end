@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-""" Auth module
 """
+Auth
+"""
+
 from flask import request
 from typing import List, TypeVar
 
 
 class Auth:
-    """ Auth class
+    """
+    Auth class
     """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ require_auth method
+        """ require_auth
         """
         if not path or not excluded_paths:
             return True
@@ -28,13 +31,13 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """ authorization_header method
+        """ authorization_header
         """
         if request is None or 'Authorization' not in request.headers:
             return None
         return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """ current_user method
+        """ current_user
         """
         return None
