@@ -6,6 +6,7 @@ from typing import List, TypeVar
 
 
 class Auth:
+    """Auth class"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ require_auth
@@ -29,10 +30,10 @@ class Auth:
         """ authorization_header
         """
         if request is None:
-            return(None)
+            return None
         return(request.headers.get('Authorization'))
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ current_user
         """
-        return(None)
+        return None
