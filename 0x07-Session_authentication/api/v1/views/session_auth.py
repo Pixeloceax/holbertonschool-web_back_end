@@ -6,7 +6,7 @@ Module of Session views 223
 from api.v1.views import app_views
 from flask import request, jsonify
 from models.user import User
-from api.v1.app import *
+from api.v1.app import SessionAuth, abort
 from os import getenv
 from api.v1.app import auth
 
