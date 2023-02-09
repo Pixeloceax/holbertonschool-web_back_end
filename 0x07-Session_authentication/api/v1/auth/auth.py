@@ -10,11 +10,11 @@ from os import getenv
 
 class Auth:
     """
-    Auth class
+    Auth class to manage the API authentication
     """
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ require_auth
+        """ require_auth - check if a path need authentication
         """
         if not path or not excluded_paths:
             return True
@@ -32,19 +32,19 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """ authorization_header
+        """ authorization_header - return the Authorization header
         """
         if request is None or 'Authorization' not in request.headers:
             return None
         return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """ current_user
+        """ current_user - return the current user
         """
         return None
 
     def session_cookie(self, request=None):
-        """ session_cookie
+        """ session_cookie - return the session cookie
         """
         if request is None:
             return None
