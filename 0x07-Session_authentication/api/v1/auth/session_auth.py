@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" 
-Module of Auth views 
+"""
+Module of Auth views
 """
 
 from api.v1.auth.auth import Auth

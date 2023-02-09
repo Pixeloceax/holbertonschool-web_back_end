@@ -37,7 +37,8 @@ def before_request():
                                         '/api/v1/forbidden/',
                                         '/api/v1/auth_session/login/']):
 
-        if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
+        if auth.authorization_header(request) is None\
+                and auth.session_cookie(request) is None:
             abort(401)
         if auth.current_user(request) is None:
             abort(403)
@@ -47,14 +48,14 @@ def before_request():
 
 @app.errorhandler(404)
 def not_found(error) -> str:
-    """ Not found handler   
+    """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
 
 
 @app.errorhandler(401)
 def unauthorized(error) -> str:
-    """ Unauthorized handler 
+    """ Unauthorized handler
     """
     return jsonify({"error": "Unauthorized"}), 401
 
