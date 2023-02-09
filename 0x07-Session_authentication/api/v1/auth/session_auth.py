@@ -43,5 +43,6 @@ class SessionAuth(Auth):
 
         if not request or not session_cookie or not user_id:
             return False
-        self.user_id_by_session_id.pop(session_cookie)
+
+        del self.user_id_by_session_id[session_cookie]
         return True
