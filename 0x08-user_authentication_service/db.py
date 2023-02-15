@@ -11,6 +11,9 @@ from sqlalchemy.orm.session import Session
 from user import Base
 from user import User
 
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+
 
 class DB:
     """
@@ -44,9 +47,15 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """
-        Find a user by email or id
+        Find a user by keyword arguments
         """
-        return self._session.query(User).filter_by(**kwargs).one()
+        try:
+            record = self._session.query(User).filter_by(**kwargs).first()
+        except TypeError:
+            raise InvalidRequestError
+        if record is None:
+            raise NoResultFound
+        return record
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
