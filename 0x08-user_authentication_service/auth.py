@@ -9,19 +9,19 @@ from user import User
 import uuid
 
 
+def _hash_password(password: str) -> str:
+    """
+    Hash a password
+    """
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
 
     def __init__(self):
         self._db = DB()
-
-    @staticmethod
-    def _hash_password(password: str) -> str:
-        """
-        Hash a password
-        """
-        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     def register_user(self, email: str, password: str) -> User:
         """
