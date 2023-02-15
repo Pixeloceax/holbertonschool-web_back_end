@@ -7,8 +7,6 @@ import bcrypt
 from db import DB
 from user import User
 from uuid import uuid4
-from sqlalchemy.orm.exc import NoResultFound
-from typing import Union
 
 
 def _hash_password(password: str) -> str:
@@ -69,18 +67,13 @@ class Auth:
         except Exception:
             return None
 
-    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+    def get_user_from_session_id(self, session_id: str) -> str:
         """
         Get a user from a session ID
         """
-
-        if session_id is None or type(session_id) is not str:
-            return None
-
         try:
-            user = self._db.find_user_by(session_id=session_id)
-            return user
-        except NoResultFound:
+            return self._db.find_user_by(session_id=session_id)
+        except Exception:
             return None
 
     def destroy_session(self, user_id: int) -> None:
