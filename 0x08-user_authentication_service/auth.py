@@ -21,6 +21,9 @@ class Auth:
     """
 
     def __init__(self):
+        """
+        Initialize an Auth instance
+        """
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
@@ -29,9 +32,11 @@ class Auth:
         """
         try:
             self._db.find_user_by(email=email)
-            raise ValueError('User {} already exists'.format(email))
         except Exception:
-            return self._db.add_user(email, self._hash_password(password))
+            hashed_password = _hash_password(password)
+            self._db.add_user(email, hashed_password)
+            return self._db.find_user_by(email=email)
+        raise ValueError(f'User {email} already exists')
 
     def valid_login(self, email: str, password: str) -> bool:
         """
@@ -99,7 +104,7 @@ class Auth:
         try:
             self._db.update_user(self._db.find_user_by(
                 reset_token=reset_token).id,
-                hashed_password=self._hash_password(password),
+                hashed_password=_hash_password(password),
                 reset_token=None)
         except Exception:
             raise ValueError
