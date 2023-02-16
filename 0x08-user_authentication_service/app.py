@@ -50,21 +50,26 @@ def login() -> str:
         abort(401)
 
 
-@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['DELETE'])
 def logout() -> str:
     """
     Logout
     """
     session_id = request.cookies.get('session_id')
-    if session_id and AUTH.destroy_session(session_id):
-        return redirect('/')
-    else:
-        abort(403)
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            AUTH.destroy_session(user.id)
+            response = redirect("/")
+            response.delete_cookie("session_id")
+            return response
+    return abort(403)
 
 
 @app.route('/profile', methods=['GET'])
 def profile() -> str:
-    """ User profile
+    """
+    User profile
     """
     session_id = request.cookies.get("session_id", None)
     if session_id is None:
