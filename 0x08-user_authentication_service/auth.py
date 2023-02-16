@@ -41,11 +41,10 @@ class Auth:
         """
         try:
             self._db.find_user_by(email=email)
-        except Exception:
-            hashed_password = _hash_password(password)
-            self._db.add_user(email, hashed_password)
-            return self._db.find_user_by(email=email)
-        raise ValueError(f'User {email} already exists')
+        except NoResultFound:
+            return self._db.add_user(email, _hash_password(password))
+        else:
+            raise ValueError(f'User {email} already exists')
 
     def valid_login(self, email: str, password: str) -> bool:
         """
@@ -55,7 +54,7 @@ class Auth:
             return bcrypt.checkpw(password.encode('utf-8'),
                                   self._db.find_user_by
                                   (email=email).hashed_password)
-        except Exception:
+        except NoResultFound:
             return False
 
     def create_session(self, email: str) -> str:
@@ -66,7 +65,7 @@ class Auth:
             self._db.update_user(self._db.find_user_by(
                 email=email).id, session_id=_generate_uuid())
             return _generate_uuid()
-        except Exception:
+        except NoResultFound:
             return None
 
     def get_user_from_session_id(self, session_id: str) -> str:
