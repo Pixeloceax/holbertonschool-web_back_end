@@ -47,7 +47,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """
-        Find a user by keyword arguments
+        Find a user by email or id
         """
         try:
             record = self._session.query(User).filter_by(**kwargs).first()

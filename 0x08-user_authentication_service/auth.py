@@ -69,7 +69,8 @@ class Auth:
             return None
 
     def get_user_from_session_id(self, session_id: str) -> str:
-        """ Get user from session ID
+        """ 
+        Get user from session ID
         """
         if session_id is None:
             return None
