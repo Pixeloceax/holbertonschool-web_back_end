@@ -2,12 +2,11 @@
 """
 Auth module
 """
-
 import bcrypt
 from db import DB
 from user import User
-from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
+import uuid
 
 
 def _hash_password(password: str) -> str:
@@ -21,7 +20,7 @@ def _generate_uuid() -> str:
     """
     Generate a UUID
     """
-    return str(uuid4())
+    return str(uuid.uuid4())
 
 
 class Auth:
@@ -42,7 +41,8 @@ class Auth:
         try:
             self._db.find_user_by(email=email)
         except NoResultFound:
-            return self._db.add_user(email, _hash_password(password))
+            new_registry = self._db.add_user(email, _hash_password(password))
+            return new_registry
         else:
             raise ValueError(f'User {email} already exists')
 
@@ -51,9 +51,9 @@ class Auth:
         Validate login
         """
         try:
+            user = self._db.find_user_by(email=email)
             return bcrypt.checkpw(password.encode('utf-8'),
-                                  self._db.find_user_by
-                                  (email=email).hashed_password)
+                                  user.hashed_password)
         except NoResultFound:
             return False
 
@@ -62,9 +62,10 @@ class Auth:
         Create a new session
         """
         try:
-            self._db.update_user(self._db.find_user_by(
-                email=email).id, session_id=_generate_uuid())
-            return _generate_uuid()
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+            return session_id
         except NoResultFound:
             return None
 
@@ -85,8 +86,8 @@ class Auth:
         Destroy a session
         """
         try:
-            self._db.update_user(self._db.find_user_by(
-                id=user_id).id, session_id=None)
+            user = self._db.find_user_by(id=user_id)
+            self._db.update_user(user.id, session_id=None)
         except NoResultFound:
             return None
 
@@ -95,9 +96,10 @@ class Auth:
         Get reset password token
         """
         try:
-            self._db.update_user(self._db.find_user_by(
-                email=email).id, reset_token=_generate_uuid())
-            return _generate_uuid()
+            user = self._db.find_user_by(email=email)
+            reset_token = _generate_uuid()
+            self._db.update_user(user.id, reset_token=reset_token)
+            return reset_token
         except NoResultFound:
             raise ValueError
 
@@ -106,8 +108,8 @@ class Auth:
         Update password
         """
         try:
-            self._db.update_user(self._db.find_user_by
-                                 (reset_token=reset_token).id,
+            user = self._db.find_user_by(reset_token=reset_token)
+            self._db.update_user(user.id,
                                  hashed_password=_hash_password(password),
                                  reset_token=None)
         except NoResultFound:
