@@ -29,13 +29,13 @@ class TestGithubOrgClient(unittest.TestCase):
     @parameterized.expand([
         ("random-url", {'repos_url': 'http://some_url.com'})
     ])
+    @patch('client.GithubOrgClient.org',
+           PropertyMock(return_value={'repos_url': 'http://some_url.com'}))
     def test_public_repos_url(self, name, result):
-        """ Test public_repos_url
+        """Test public_repos_url
         """
-        with patch('client.GithubOrgClient.org',
-                   PropertyMock(return_value=result)):
-            response = GithubOrgClient(name)._public_repos_url
-            self.assertEqual(response, result.get('repos_url'))
+        response = GithubOrgClient(name)._public_repos_url
+        self.assertEqual(response, result.get('repos_url'))
 
     @patch('client.get_json')
     def test_public_repos(self, mocked_method):
