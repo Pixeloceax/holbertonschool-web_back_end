@@ -2,19 +2,27 @@
 """
 app module
 """
-from flask import Flask, render_template, request, g as flask
+from flask import Flask, render_template, request, g
 from flask_babel import Babel
 
 app = Flask(__name__)
 babel = Babel()
 
-
+# User table
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
     3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
+
+
+@app.before_request
+def before_request():
+    """
+    before_request function
+    """
+    g.user = get_user()
 
 
 class Config(object):
@@ -41,30 +49,23 @@ def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-def get_user(login_as):
-    """
-    get_user function
-    """
-    if login_as:
-        user_id = int(login_as)
-        return users.get(user_id)
-    return None
-
-
-@app.before_request
-def before_request():
-    """
-    before_request function
-    """
-    flask.user = get_user(request.args.get("login_as"))
-
-
 @app.route("/", methods=["GET"])
 def index():
     """
     index route
     """
     return render_template("5-index.html")
+
+
+def get_user():
+    """
+    get_user function
+    """
+    Id = request.args.get('login_as')
+    if Id and int(Id) in users:
+        return users[int(Id)]
+    else:
+        return None
 
 
 if __name__ == "__main__":
