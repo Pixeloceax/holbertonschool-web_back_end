@@ -8,14 +8,6 @@ app = Flask(__name__)
 babel = Babel(app)
 
 
-@app.route("/", methods=["GET"])
-def index():
-    """
-    index route
-    """
-    return render_template("1-index.html")
-
-
 class Config(object):
     """
     Config class
@@ -23,6 +15,14 @@ class Config(object):
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
+
+
+@app.route("/", methods=["GET"])
+def index():
+    """
+    index route
+    """
+    return render_template("1-index.html")
 
 
 if __name__ == "__main__":
