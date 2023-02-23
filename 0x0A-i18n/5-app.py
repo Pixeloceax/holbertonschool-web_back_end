@@ -3,12 +3,11 @@
 app module
 """
 from flask import Flask, render_template, request, g
-from flask_babel import Babel
+from flask_babel import Babel, gettext
 
 app = Flask(__name__)
 babel = Babel()
 
-# User table
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
@@ -61,9 +60,9 @@ def get_user():
     """
     get_user function
     """
-    Id = request.args.get('login_as')
-    if Id and int(Id) in users:
-        return users[int(Id)]
+    user_id = request.args.get('login_as')
+    if user_id and int(user_id) in users:
+        return users[int(user_id)]
     else:
         return None
 
