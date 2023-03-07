@@ -27,38 +27,37 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
+    """ call_history method
     """
-    Call history
-    """
-    key = method.__qualname__
+    inputs = method.__qualname__ + ":inputs"
+    outputs = method.__qualname__ + ":outputs"
 
     @wraps(method)
-    def wrapper(*args, **kwds):
+    def wrapper(self, *args, **kwargs):
+        """ wrapper method
         """
-        Wrapper
-        """
-        args[0]._redis.rpush("{}:inputs".format(key), str(args[1:]))
-        result = method(*args, **kwds)
-        args[0]._redis.rpush("{}:outputs".format(key), str(result))
-        return result
-
+        self._redis.rpush(inputs, str(args))
+        value = method(self, *args, **kwargs)
+        self._redis.rpush(outputs, value)
+        return value
     return wrapper
 
 
 def replay(method: Callable) -> None:
+    """ replay method
     """
-    Replay function that shows the history of calls of a particular function
-    """
-    inputs_key = method.__qualname__ + ":inputs"
-    outputs_key = method.__qualname__ + ":outputs"
-    inputs = Cache._redis.lrange(inputs_key, 0, -1)
-    outputs = Cache._redis.lrange(outputs_key, 0, -1)
-    count = len(inputs)
-    print(f"{method.__qualname__} was called {count} times:")
-    for i, (input_str, output_str) in enumerate(zip(inputs, outputs)):
-        input_repr = ", ".join(ast.literal_eval(input_str.decode()))
-        output_repr = output_str.decode()
-        print(f"{method.__qualname__}(*({input_repr},)) -> {output_repr}")
+    inputs = method.__qualname__ + ":inputs"
+    outputs = method.__qualname__ + ":outputs"
+    count = method.__qualname__
+
+    r = redis.Redis()
+    count = r.get(count).decode('utf-8')
+    print("{} was called {} times:".format(method.__qualname__, count))
+    inputs = r.lrange(inputs, 0, -1)
+    outputs = r.lrange(outputs, 0, -1)
+    for i, o in zip(inputs, outputs):
+        print("{}(*{}) -> {}".format(method.__qualname__, i.decode('utf-8'),
+                                     o.decode('utf-8')))
 
 
 class Cache:
