@@ -7,9 +7,10 @@ import redis
 import uuid
 from functools import wraps
 import ast
+from typing import *
 
 
-def count_calls(method: callable) -> callable:
+def count_calls(method: Callable) -> Callable:
     """
     Count calls
     """
@@ -26,7 +27,7 @@ def count_calls(method: callable) -> callable:
     return wrapper
 
 
-def call_history(method: callable) -> callable:
+def call_history(method: Callable) -> Callable:
     """
     Call history
     """
@@ -45,7 +46,7 @@ def call_history(method: callable) -> callable:
     return wrapper
 
 
-def replay(method: callable) -> None:
+def replay(method: Callable) -> None:
     """
     Replay function that shows the history of calls of a particular function
     """
@@ -75,7 +76,7 @@ class Cache:
 
     @count_calls
     @call_history
-    def store(self, data) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Store data in redis
         """
