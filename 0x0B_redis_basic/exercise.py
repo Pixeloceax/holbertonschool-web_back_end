@@ -27,14 +27,16 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    """ call_history method
+    """
+    call_history method
     """
     inputs = method.__qualname__ + ":inputs"
     outputs = method.__qualname__ + ":outputs"
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ wrapper method
+        """
+        wrapper method
         """
         self._redis.rpush(inputs, str(args))
         value = method(self, *args, **kwargs)
@@ -44,7 +46,8 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(method: Callable) -> None:
-    """ replay method
+    """
+    replay method
     """
     inputs = method.__qualname__ + ":inputs"
     outputs = method.__qualname__ + ":outputs"
