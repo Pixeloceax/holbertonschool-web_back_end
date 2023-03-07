@@ -22,7 +22,8 @@ def count_calls(method: Callable) -> Callable:
         Wrapper
         """
         args[0]._redis.incr(key)
-        return method(*args, **kwds)
+        result = method(*args, **kwds)
+        return result
 
     return wrapper
 
