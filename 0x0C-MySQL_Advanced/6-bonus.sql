@@ -1,10 +1,13 @@
--- Create a stored procedure AddBonus that takes 3 parameters: user_id, project_name, score
-DELIMITER $$
-CREATE PROCEDURE AddBonus ( user_id INTEGER, project_name VARCHAR(255), score INTEGER)
-BEGIN
-    INSERT INTO project(name) SELECT project_name FROM DUAL
-    WHERE NOT EXISTS (SELECT * FROM project WHERE name = project_name);
+-- Create a stored procedure AddBonus that takes 3 arguments: user_id, project_name, score
 
-    INSERT INTO user_project(user_id, project_id, score)
+DELIMITER $$
+
+CREATE PROCEDURE AddBonus(IN user_id INTEGER, IN project_name VARCHAR(255), IN score INTEGER)
+BEGIN
+    INSERT INTO projects(name) SELECT project_name FROM DUAL
+    WHERE NOT EXISTS (SELECT * FROM projects WHERE name = project_name LIMIT 1);
+
+    INSERT INTO corrections (user_id, project_id, score) VALUES(user_id, (SELECT id FROM projects WHERE name = project_name), score);
 END $$
+
 DELIMITER ;
