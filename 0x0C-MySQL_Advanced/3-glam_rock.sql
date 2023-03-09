@@ -1,3 +1,5 @@
+-- Name: 3-glam_rock.sql
+
 SELECT band_name, 
        (YEAR(split) - YEAR(formed)) AS lifespan 
 FROM metal_bands 
