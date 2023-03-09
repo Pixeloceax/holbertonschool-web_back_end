@@ -1,9 +1,6 @@
 -- Name: 4-store.sql
-CREATE OR REPLACE TRIGGER Mytrigger
-BEFORE INSERT OR UPDATE ON items
-FOR EACH ROW
-EGIN
-  UPDATE products
-       SET quantity = quantity-New.quantity
-        WHERE product_code=New.product_code;
-END;
+CREATE TRIGGER decrease_quantity AFTER INSERT ON orders
+FOR EACH ROW UPDATE items
+SET
+quantity = quantity - NEW.number
+WHERE name = NEW.item_name;
