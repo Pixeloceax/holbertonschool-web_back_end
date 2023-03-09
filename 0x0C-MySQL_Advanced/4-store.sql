@@ -1,3 +1,4 @@
+-- Name: 4-store.sql
 CREATE OR REPLACE TRIGGER Mytrigger
 BEFORE INSERT OR UPDATE ON items
 FOR EACH ROW
