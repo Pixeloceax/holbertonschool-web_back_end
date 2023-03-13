@@ -1,0 +1,2 @@
+//  1.  Create a database called school2.  Use it.
+db.school.find()
