@@ -1,0 +1,2 @@
+// File: 7-delete
+db.school.deleteMany( { name : "Holberton school" } )
