@@ -1,0 +1,2 @@
+// 1. Create a database named "school"
+db.school.insert({ name: "Holberton school"  })
