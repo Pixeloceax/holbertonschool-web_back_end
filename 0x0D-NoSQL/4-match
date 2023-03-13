@@ -1,0 +1,2 @@
+// Create a database named "school"
+db.school.find({ name: "Holberton school" })
