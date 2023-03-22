@@ -8,10 +8,9 @@ export default class HolbertonClass {
     if (value === 'string') {
       return this._location;
     }
-    return this._size;
-  }
-
-  [Symbol.toStringTag]() {
-    return 'HolbertonClass';
+    if (value === 'number') {
+      return this._size;
+    }
+    return null;
   }
 }
