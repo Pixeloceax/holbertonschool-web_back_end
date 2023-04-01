@@ -1,7 +1,14 @@
-console.log('Welcome to Holberton School, what is your name?');
-process.stdin.on('data', (data) => {
-  const name = data.toString().trim();
-  console.log(`Your name is: ${name}`);
-  console.log('This important software is now closing');
-  process.exit();
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
+
+process.stdin.setEncoding('utf8');
+
+process.stdin.on('readable', () => {
+  const read = process.stdin.read();
+  if (read !== null) {
+    process.stdout.write(`Your name is: ${read}`);
+  }
+});
+
+process.stdin.on('end', () => {
+  process.stdout.write('This important software is now closing\n');
 });
