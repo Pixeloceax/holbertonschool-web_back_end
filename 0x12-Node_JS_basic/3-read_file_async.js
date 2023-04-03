@@ -20,7 +20,7 @@ async function countStudents(CsvFile) {
         console.log(
           `Number of students in ${field}: ${
             students.length
-          }. List: ${students.join(', ')}`
+          }. List: ${students.join(', ')}`,
         );
       }
     }
@@ -28,3 +28,5 @@ async function countStudents(CsvFile) {
     throw new Error(`Cannot load the database: ${err}`);
   }
 }
+
+module.exports = countStudents;
