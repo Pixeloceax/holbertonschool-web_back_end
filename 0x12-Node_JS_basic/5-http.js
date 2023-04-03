@@ -12,9 +12,18 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.url === '/students') {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end(await countStudents(process.argv[2]));
+    try {
+      const data = await countStudents(process.argv[2]);
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(data);
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(`Error: ${err.message}`);
+    }
   }
+
+  res.writeHead(404, { 'Content-Type': 'text/plain' });
+  res.end('Not found');
 });
 
 server.listen(port, host, () => {
