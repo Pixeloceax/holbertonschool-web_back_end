@@ -1,31 +1,40 @@
 const fs = require('fs');
 
-async function countStudents(CsvFile) {
+async function countStudents(path) {
   try {
-    const data = await fs.readFileSync(CsvFile, 'utf8');
-    const lines = data.trim().split('\n');
-    const studentsByField = {};
-    for (let i = 1; i < lines.length; i += 1) {
-      const [name, , , field] = lines[i].split(',');
-      if (Object.prototype.hasOwnProperty.call(studentsByField, field)) {
-        studentsByField[field].push(name);
-      } else {
-        studentsByField[field] = [name];
-      }
+    const data = await fs.promises.readFile(path, 'utf8');
+
+    const lines = data.split('\n');
+    if (lines[lines.length - 1] === '') {
+      lines.pop();
     }
-    console.log(`Number of students: ${lines.length - 1}`);
-    for (const field in studentsByField) {
-      if (Object.prototype.hasOwnProperty.call(studentsByField, field)) {
-        const students = studentsByField[field];
-        console.log(
-          `Number of students in ${field}: ${
-            students.length
-          }. List: ${students.join(', ')}`,
-        );
-      }
+
+    const students = lines.map((line) => line.split(','));
+    const fields = [...new Set(students.map((student) => student[3]))];
+    fields.shift();
+
+    const results = [];
+
+    console.log(`Number of students: ${students.length - 1}`);
+    results.push(`Number of students: ${students.length - 1}`);
+    for (const field of fields) {
+      const fieldStudents = students.filter((student) => student[3] === field);
+      const fieldStudentsNames = fieldStudents.map((student) => student[0]);
+      results.push(
+        `Number of students in ${field}: ${
+          fieldStudents.length
+        }. List: ${fieldStudentsNames.join(', ')}`
+      );
+      console.log(
+        `Number of students in ${field}: ${
+          fieldStudents.length
+        }. List: ${fieldStudentsNames.join(', ')}`
+      );
     }
+
+    return results;
   } catch (err) {
-    throw new Error(`Cannot load the database: ${err}`);
+    throw Error('Cannot load the database');
   }
 }
 
