@@ -1,30 +1,28 @@
 const http = require('http');
 const countStudents = require('./3-read_file_async');
 
+const filePath = process.argv[2];
+
 const app = http.createServer((req, res) => {
   if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    countStudents(process.argv[2])
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.write('This is the list of our students\n');
+    countStudents(filePath)
       .then((data) => {
-        let num = 0;
-        let response = '';
-        for (const [key, value] of Object.entries(data)) {
-          num += value.length;
-          response += `Number of students in ${key}: ${
-            value.length
-          }. List: ${value.join(', ')}\n`;
-        }
-        response = `This is the list of our students\nNumber of students: ${num}\n${response.slice(
-          0,
-          -1
-        )}`;
-        res.end(response);
+        res.write(data.join('\n'));
+        res.end();
       })
-      .catch((error) => {
-        res.end(`This is the list of our students\n${error.message}`);
+      .catch(() => {
+        res.end('Cannot load the database');
       });
   }
 });
-app.listen(1245);
+
+app.listen(1245, () => {
+  console.log('Server running at localhost:1245');
+});
+
 module.exports = app;
