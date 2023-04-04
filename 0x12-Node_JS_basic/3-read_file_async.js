@@ -23,12 +23,12 @@ async function countStudents(path) {
       results.push(
         `Number of students in ${field}: ${
           fieldStudents.length
-        }. List: ${fieldStudentsNames.join(', ')}`
+        }. List: ${fieldStudentsNames.join(', ')}`,
       );
       console.log(
         `Number of students in ${field}: ${
           fieldStudents.length
-        }. List: ${fieldStudentsNames.join(', ')}`
+        }. List: ${fieldStudentsNames.join(', ')}`,
       );
     }
 
