@@ -1,0 +1,13 @@
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "description": "My project description",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "mocha": "^9.0.3",
+    "chai": "^4.3.4"
+  }
+}
