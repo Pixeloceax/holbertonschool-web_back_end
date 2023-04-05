@@ -60,4 +60,17 @@ describe("calculateNumber", () => {
     assert(isNaN(calculateNumber(NaN, 2)));
     assert(isNaN(calculateNumber(2, NaN)));
   });
+
+  it("should return NaN if both inputs are NaN", () => {
+    assert(isNaN(calculateNumber(NaN, NaN)));
+  });
+
+  it("should return 0 if one of the inputs is 0", () => {
+    assert.strictEqual(calculateNumber(0, 2), 2);
+    assert.strictEqual(calculateNumber(2, 0), 2);
+  });
+
+  it("should return 0 if both inputs are 0", () => {
+    assert.strictEqual(calculateNumber(0, 0), 0);
+  });
 });
