@@ -1,21 +1,25 @@
-const kue = require('kue');
+import kue from 'kue';
+
 const queue = kue.createQueue();
 
-const blackList = ['4153518780 ', '4153518781 '];
+const blacklist = ['4153518780', '4153518781'];
 
-const sendNotification = (phoneNumber, message, job, done) => {
+function sendNotification(phoneNumber, message, job, done) {
   job.progress(0, 100);
-  if (blackList.includes(phoneNumber)) {
-    done(Error(`Phone number ${phoneNumber} is blacklisted`));
-  } else {
+
+  if (!blacklist.includes(phoneNumber)) {
     job.progress(50, 100);
     console.log(
       `Sending notification to ${phoneNumber}, with message: ${message}`
     );
     done();
+  } else {
+    done(Error(`Phone number ${phoneNumber} is blacklisted`));
   }
-};
+}
 
-queue.process('push_notification_code', 2, (job, done) => {
-  sendNotification(job.data.phoneNumber, job.data.message, job, done);
+queue.process('push_notification_code_2', 2, (job, done) => {
+  const { phoneNumber, message } = job.data;
+
+  sendNotification(phoneNumber, message, job, done);
 });
